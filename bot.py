@@ -10,6 +10,8 @@ from datetime import datetime
 # Important Stuff
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
+
+# Initialise bot
 bot = commands.Bot(
     command_prefix='-',
     allowed_mentions=discord.AllowedMentions(
@@ -20,6 +22,8 @@ bot = commands.Bot(
     owner_id=386731759729115137
 )
 config_channel = 752723937942831143
+
+# Load cogs
 cogList = []
 for file in os.listdir('./cogs'):
     if file.endswith('.py'):
@@ -27,11 +31,13 @@ for file in os.listdir('./cogs'):
         cogList.append(f'{file[:-3]}')
 
 
+# Stuff that may help cut down on code in the future:
 def now():
     return str(datetime.today().strftime("%d-%m-%Y %H:%M:%S"))
 # Thanks <@302956027656011776> (Ernest Izdebski) for the above code.
 
 
+# Some very general bot stuff.
 @bot.event
 async def on_ready():
     print(f'Day and Time: {now()}')
@@ -48,4 +54,5 @@ async def on_ready():
 async def showcogs(ctx):
     await ctx.send(f"{', '.join(cogList)}")
 
+# Required
 bot.run(TOKEN)
