@@ -1,3 +1,4 @@
 *.env
 *.pyc
 *.cfg
+/cogs/testing.py
