@@ -1,3 +1,5 @@
+# This is for the more "fun" commands for this bot.
+
 import discord
 from discord.ext import commands
 import random

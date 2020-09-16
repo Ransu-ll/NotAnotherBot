@@ -1,3 +1,7 @@
+# This is meant for commands the owner of the bot.
+# Things that directly relate to the functionality of the bot,
+# like (un/re)loading cogs.
+
 import discord
 from discord.ext import commands
 from datetime import datetime
@@ -71,13 +75,3 @@ class OwnerOnlyCommands(commands.Cog):
 
 def setup(bot):
     bot.add_cog(OwnerOnlyCommands(bot))
-
-
-"""
-In main bot file ensure the following is added:
-import os
-
-for file in os.listdir('./cogs'):
-    if file.endswith('.py'):
-        bot.load_extension(f'cogs.{file[:-3]}')
-"""

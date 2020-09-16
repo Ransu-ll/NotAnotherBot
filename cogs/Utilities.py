@@ -1,3 +1,6 @@
+# This module is useful for getting general information
+# on things lke users and the guild the bot is in.
+
 import discord
 from discord.ext import commands
 import random
