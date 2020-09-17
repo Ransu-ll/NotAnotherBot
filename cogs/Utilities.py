@@ -54,13 +54,36 @@ class Utilities(commands.Cog):
         elif mention.web_status == disOf:
             web = ':white_circle:'
 
-        embedUserInfo = dc.Embed(title=f'{mention.name}#{mention.discriminator}', colour=mention.colour)
-        embedUserInfo.set_thumbnail(url=mention.avatar_url)
-        embedUserInfo.add_field(name='Display Name', value=mention.display_name, inline=True)
-        embedUserInfo.add_field(name='ID', value=mention.id, inline=True)
-        embedUserInfo.add_field(name='Created at (UTC)', value=mention.created_at, inline=False)
-        embedUserInfo.add_field(name='Joined guild at (UTC)', value=mention.joined_at, inline=False)
-        embedUserInfo.add_field(name='Status', value=f'{desk} Desktop: **{mention.desktop_status}**\n{mobile} Mobile: **{mention.mobile_status}**\n{web} Browser: **{mention.web_status}**', inline=False)
+        embedUserInfo = dc.Embed(
+            title=f'{mention.name}#{mention.discriminator}',
+            colour=mention.colour
+        )
+        embedUserInfo.set_thumbnail(
+            url=mention.avatar_url
+        )
+        embedUserInfo.add_field(
+            name='Display Name',
+            value=mention.display_name,
+            inline=True
+        )
+        embedUserInfo.add_field(
+            name='ID',
+            value=mention.id,
+            inline=True
+        )
+        embedUserInfo.add_field(
+            name='Created at (UTC)',
+            value=mention.created_at,
+            inline=False)
+        embedUserInfo.add_field(
+            name='Joined guild at (UTC)',
+            value=mention.joined_at,
+            inline=False)
+        embedUserInfo.add_field(
+            name='Status',
+            value=f'{desk} Desktop: **{mention.desktop_status}**\n{mobile} Mobile: **{mention.mobile_status}**\n{web} Browser: **{mention.web_status}**',
+            inline=False)
+
         await ctx.send(embed=embedUserInfo)
 
     @commands.command(
