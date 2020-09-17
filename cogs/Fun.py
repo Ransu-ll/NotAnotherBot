@@ -1,6 +1,6 @@
 # This is for the more "fun" commands for this bot.
 
-import discord
+import discord as dc
 from discord.ext import commands
 import random
 

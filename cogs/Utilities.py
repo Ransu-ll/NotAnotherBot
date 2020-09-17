@@ -1,11 +1,9 @@
 # This module is useful for getting general information
 # on things lke users and the guild the bot is in.
 
-import discord
+import discord as dc
 from discord.ext import commands
 import random
-
-dc = discord
 
 
 class Utilities(commands.Cog):
@@ -111,7 +109,7 @@ class Utilities(commands.Cog):
         # Finally, embeded content.
         embedServerInfo = dc.Embed(
             title=f'{ctx.message.guild.name}',
-            colour=discord.Colour.blurple()
+            colour=dc.Colour.blurple()
         )
         embedServerInfo.set_thumbnail(
             url=ctx.guild.icon_url
@@ -156,7 +154,7 @@ class Utilities(commands.Cog):
 
         # Prompting the caller. This embed gets edited.
         generate = await ctx.send(
-            embed=discord.Embed(
+            embed=dc.Embed(
                 title='Input title',
                 description='You have 10 seconds to type a title.\n(Type in "Cancel" as the value to stop embed)'
             )
@@ -170,7 +168,7 @@ class Utilities(commands.Cog):
             )
         except asyncio.TimeoutError:
             await generate.edit(
-                embed=discord.Embed(
+                embed=dc.Embed(
                     title='Timed out',
                     description=''
                 )
@@ -183,7 +181,7 @@ class Utilities(commands.Cog):
             return
 
         await generate.edit(
-            embed=discord.Embed(
+            embed=dc.Embed(
                 title='Input description',
                 description='You have 5 minutes to write a description.\n(Type in "Cancel" as the value to stop embed)'
             )
@@ -196,7 +194,7 @@ class Utilities(commands.Cog):
             )
         except asyncio.TimeoutError:
             await generate.edit(
-                embed=discord.Embed(
+                embed=dc.Embed(
                     title='Timed out',
                     description=''
                 )
@@ -208,12 +206,12 @@ class Utilities(commands.Cog):
             await ctx.message.delete()
             return
 
-        await generate.edit(embed=discord.Embed(
+        await generate.edit(embed=dc.Embed(
             title='Generating embed...')
         )
 
         # The actual embed itself.
-        embed = discord.Embed(
+        embed = dc.Embed(
             title=title.content,
             description=description.content
         )

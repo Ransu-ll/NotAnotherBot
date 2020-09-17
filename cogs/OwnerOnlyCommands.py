@@ -2,7 +2,7 @@
 # Things that directly relate to the functionality of the bot,
 # like (un/re)loading cogs.
 
-import discord
+import discord as dc
 from discord.ext import commands
 from datetime import datetime
 
