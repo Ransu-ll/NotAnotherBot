@@ -140,6 +140,95 @@ class Utilities(commands.Cog):
         )
         await ctx.send(embed=embedServerInfo)
 
+    @commands.command(
+        name='createembed',
+        aliases=['ec'],
+        brief='Creates an embed.',
+        description='Create an embed that contains author information, a title and a description.'
+    )
+    async def create_embed(self, ctx):
+        commandCaller = ctx.message.author
+        # Ensure that embed can only be modifed by person who called command.
+
+        def check(self):
+            return lambda msg: msg.author == ctx.author
+            # Okay but how does lambda work?
+
+        # Prompting the caller. This embed gets edited.
+        generate = await ctx.send(
+            embed=discord.Embed(
+                title='Input title',
+                description='You have 10 seconds to type a title.\n(Type in "Cancel" as the value to stop embed)'
+            )
+        )
+
+        try:
+            title = await self.bot.wait_for(
+                'message',
+                check=check(self),
+                timeout=10.0
+            )
+        except asyncio.TimeoutError:
+            await generate.edit(
+                embed=discord.Embed(
+                    title='Timed out',
+                    description=''
+                )
+            )
+            return
+
+        if title.content == 'Cancel':
+            await generate.delete()
+            await ctx.message.delete()
+            return
+
+        await generate.edit(
+            embed=discord.Embed(
+                title='Input description',
+                description='You have 5 minutes to write a description.\n(Type in "Cancel" as the value to stop embed)'
+            )
+        )
+        try:
+            description = await self.bot.wait_for(
+                'message',
+                check=check(self),
+                timeout=300.0
+            )
+        except asyncio.TimeoutError:
+            await generate.edit(
+                embed=discord.Embed(
+                    title='Timed out',
+                    description=''
+                )
+            )
+            return
+
+        if description.content == 'Cancel':
+            await generate.delete()
+            await ctx.message.delete()
+            return
+
+        await generate.edit(embed=discord.Embed(
+            title='Generating embed...')
+        )
+
+        # The actual embed itself.
+        embed = discord.Embed(
+            title=title.content,
+            description=description.content
+        )
+        embed.set_author(
+            name=f'{commandCaller.name}#{commandCaller.discriminator}',
+            icon_url=commandCaller.avatar_url
+        )
+
+        # Clean up the stuff.
+        await generate.delete()
+        await title.delete()
+        await description.delete()
+        await ctx.message.delete()
+        await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Utilities(bot))
