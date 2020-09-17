@@ -4,6 +4,7 @@
 import discord as dc
 from discord.ext import commands
 import random
+import asyncio
 
 
 class Utilities(commands.Cog):
@@ -144,7 +145,14 @@ class Utilities(commands.Cog):
         brief='Creates an embed.',
         description='Create an embed that contains author information, a title and a description.'
     )
-    async def create_embed(self, ctx):
+    # Todo: ensure that this cannot send embeds into other servers.
+    async def create_embed(self, ctx, channel):
+        try:
+            id = int(channel[2:-1])
+            channel = self.bot.get_channel(id)
+        except ValueError:
+            await ctx.send('Not a valid channel!')
+        print(channel)
         commandCaller = ctx.message.author
         # Ensure that embed can only be modifed by person who called command.
 
@@ -225,7 +233,10 @@ class Utilities(commands.Cog):
         await title.delete()
         await description.delete()
         await ctx.message.delete()
-        await ctx.send(embed=embed)
+        try:
+            await channel.send(embed)
+        except dc.errors.Forbidden:
+            await ctx.send(f'Lacking perms to send messages in {channel}')
 
 
 def setup(bot):
