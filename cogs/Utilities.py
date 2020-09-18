@@ -145,14 +145,16 @@ class Utilities(commands.Cog):
         brief='Creates an embed.',
         description='Create an embed that contains author information, a title and a description.'
     )
-    # Todo: ensure that this cannot send embeds into other servers.
     async def create_embed(self, ctx, channel):
         try:
             id = int(channel[2:-1])
             channel = self.bot.get_channel(id)
+            if channel.guild != ctx.message.guild:
+                await ctx.send('Not a channel within the server.')
+                return
         except ValueError:
             await ctx.send('Not a valid channel!')
-        print(channel)
+            return
         commandCaller = ctx.message.author
         # Ensure that embed can only be modifed by person who called command.
 
@@ -161,10 +163,10 @@ class Utilities(commands.Cog):
             # Okay but how does lambda work?
 
         # Prompting the caller. This embed gets edited.
-        generate = await ctx.send(
+        generateConfig = await ctx.send(
             embed=dc.Embed(
                 title='Input title',
-                description='You have 10 seconds to type a title.\n(Type in "Cancel" as the value to stop embed)'
+                description='You have 60 seconds to type a title.\n(Type in "Cancel" as the value to stop embed)'
             )
         )
 
@@ -172,10 +174,10 @@ class Utilities(commands.Cog):
             title = await self.bot.wait_for(
                 'message',
                 check=check(self),
-                timeout=10.0
+                timeout=60.0
             )
         except asyncio.TimeoutError:
-            await generate.edit(
+            await generateConfig.edit(
                 embed=dc.Embed(
                     title='Timed out',
                     description=''
@@ -184,11 +186,11 @@ class Utilities(commands.Cog):
             return
 
         if title.content == 'Cancel':
-            await generate.delete()
+            await generateConfig.delete()
             await ctx.message.delete()
             return
 
-        await generate.edit(
+        await generateConfig.edit(
             embed=dc.Embed(
                 title='Input description',
                 description='You have 5 minutes to write a description.\n(Type in "Cancel" as the value to stop embed)'
@@ -201,7 +203,7 @@ class Utilities(commands.Cog):
                 timeout=300.0
             )
         except asyncio.TimeoutError:
-            await generate.edit(
+            await generateConfig.edit(
                 embed=dc.Embed(
                     title='Timed out',
                     description=''
@@ -210,33 +212,38 @@ class Utilities(commands.Cog):
             return
 
         if description.content == 'Cancel':
-            await generate.delete()
+            await generateConfig.delete()
             await ctx.message.delete()
             return
 
-        await generate.edit(embed=dc.Embed(
+        await generateConfig.edit(embed=dc.Embed(
             title='Generating embed...')
         )
 
         # The actual embed itself.
-        embed = dc.Embed(
+        messageEmbed = dc.Embed(
             title=title.content,
             description=description.content
         )
-        embed.set_author(
+        messageEmbed.set_author(
             name=f'{commandCaller.name}#{commandCaller.discriminator}',
             icon_url=commandCaller.avatar_url
         )
 
         # Clean up the stuff.
-        await generate.delete()
         await title.delete()
         await description.delete()
         await ctx.message.delete()
         try:
-            await channel.send(embed)
+            await channel.send(embed=messageEmbed)
+            await generateConfig.delete()
         except dc.errors.Forbidden:
-            await ctx.send(f'Lacking perms to send messages in {channel}')
+            await generateConfig.edit(
+                embed=dc.Embed(
+                    title='Failed to send',
+                    description=f'No permissions to send to #{channel}. Ensure bot can send embed messages!'
+                )
+            )
 
 
 def setup(bot):
