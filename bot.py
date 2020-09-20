@@ -13,6 +13,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 
+# Thanks https://www.youtube.com/watch?v=yrHbGhem6I4&ab_channel=Lucas
 def get_prefix(bot, message):
     # Working with dictionaries.
     with open('./config/prefixes.json', 'r') as file:
@@ -29,7 +30,7 @@ bot = commands.Bot(
         users=True,
         roles=False
     ),
-    owner_id=386731759729115137
+    owner_ids=[386731759729115137, 634318941329817600]
 )
 config_channel = 752723937942831143
 
