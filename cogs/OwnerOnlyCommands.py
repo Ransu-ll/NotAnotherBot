@@ -12,7 +12,7 @@ def now():
 # Thanks <@302956027656011776> (Ernest Izdebski) for the above code.
 
 
-class OwnerOnlyCommands(commands.Cog):
+class OwnerOnlyCommands(commands.Cog, command_attrs=dict(hidden=True)):
     def __init__(self, bot):
         self.bot = bot
 
