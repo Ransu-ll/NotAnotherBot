@@ -16,13 +16,17 @@ class OwnerOnlyCommands(commands.Cog, command_attrs=dict(hidden=True)):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(
-        name='cogreload',
-        aliases=['restartcog'],
+    @commands.is_owner()
+    @commands.group()
+    async def cog(self, ctx):
+        if ctx.invoked_subcommand is None:
+            await ctx.send('Invalid cogs command.')
+
+    @cog.command(
+        aliases=['restart'],
         brief='Reloads a cog.'
     )
-    @commands.is_owner()
-    async def reload(self, ctx, nameOfCog):
+    async def reload(self, ctx, nameOfCog: str):
         try:
             self.bot.reload_extension(f"cogs.{nameOfCog}")
             print(f'At {now()}: {nameOfCog} reloaded')
@@ -32,11 +36,10 @@ class OwnerOnlyCommands(commands.Cog, command_attrs=dict(hidden=True)):
         except commands.ExtensionNotFound:
             await ctx.send('Cog not found.')
 
-    @commands.command(
+    @cog.command(
         brief='Unloads a cog.'
     )
-    @commands.is_owner()
-    async def cogunload(self, ctx, nameOfCog):
+    async def unload(self, ctx, nameOfCog):
         try:
             self.bot.unload_extension(f"cogs.{nameOfCog}")
             print(f'At {now()}: {nameOfCog} unloaded')
@@ -46,17 +49,18 @@ class OwnerOnlyCommands(commands.Cog, command_attrs=dict(hidden=True)):
         except commands.ExtensionNotFound:
             await ctx.send('Cog not found.')
 
-    @commands.command(
+    @cog.command(
         brief='Loads a cog.'
     )
-    @commands.is_owner()
-    async def cogload(self, ctx, nameOfCog):
+    async def load(self, ctx, nameOfCog):
         try:
             self.bot.load_extension(f"cogs.{nameOfCog}")
             print(f'At {now()}: {nameOfCog} loaded')
             await ctx.send(f'{nameOfCog} loaded!')
         except commands.ExtensionNotFound:
             await ctx.send('Cog not found.')
+        except commands.ExtensionAlreadyLoaded:
+            await ctx.send('Cog already loaded.')
 
     @commands.command(
         brief='[WIP] Stops bot from running.'
