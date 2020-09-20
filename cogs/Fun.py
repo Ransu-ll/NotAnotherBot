@@ -9,21 +9,23 @@ class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    async def ping(self, ctx):
-        await ctx.send('Pong')
-
     @commands.command(
         brief='Bot says whatever follows the command',
         description='Bot says whatever follows the command.')
     async def echo(self, ctx, *, message: str):
         await ctx.send(message)
 
-    @commands.command(brief='Greets the user', description='Greets the user')
+    @commands.command(
+        brief='Greets the member',
+        description='Greets the member'
+    )
     async def hello(self, ctx):
         await ctx.send(f'Hello {ctx.message.author.mention}!')
 
-    @commands.command(brief='Rolls a die/dice', description='[min] [max] [number of dice]')
+    @commands.command(
+        brief='Rolls a die/dice',
+        description='Rolls a die or dice. Roles one standard six-sided dice by default.'
+    )
     async def rolldice(self, ctx, minimum=1, maximum=6, times=1):
         maxtimes = 15
         if minimum >= maximum:
@@ -41,7 +43,10 @@ class Fun(commands.Cog):
             listofdice.append(str(random.randrange(minimum, maximum + 1)))
         await ctx.send('\n'.join(listofdice))
 
-    @commands.command(name='8ball', brief='Ask 8ball a question', description='Ask 8ball a question. Must include a question mark (?) at the end!')
+    @commands.command(
+        name='8ball',
+        brief='Ask 8ball a question',
+        description='Ask 8ball a question. Must include a question mark (?) at the end!')
     async def _8ball(self, ctx, *, message):
         possibleAnswers = (
             'It is certain.', 'It is decidedly so.', 'Without a doubt.',

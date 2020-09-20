@@ -86,7 +86,8 @@ class Utilities(commands.Cog):
         await ctx.send(embed=embedUserInfo)
 
     @commands.command(
-        name='serverinfo', aliases=['server,'],
+        name='serverinfo',
+        aliases=['server,'],
         brief='Displays basic server information',
         description='''
         Displays server name, server icon, server ID, server region, no. of channels and no. of members
