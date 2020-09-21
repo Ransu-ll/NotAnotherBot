@@ -30,7 +30,7 @@ bot = commands.Bot(
         users=True,
         roles=False
     ),
-    owner_ids=[386731759729115137, 634318941329817600]
+    owner_ids=[386731759729115137]
 )
 config_channel = 752723937942831143
 
