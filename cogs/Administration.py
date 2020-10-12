@@ -14,7 +14,7 @@ class Admin(commands.Cog):
         if ctx.invoked_subcommand is None:
             await ctx.send('Invalid user command.')
 
-    @has_permissions(kick_members)
+    @commands.has_permissions(kick_members=True)
     @mem.command(
         name='kick',
         brief='Kicks a member.',
@@ -24,7 +24,7 @@ class Admin(commands.Cog):
         await mention.kick(reason=f'By {ctx.author.name}#{ctx.author.discriminator} ({ctx.author.id}): {reason}')
         await ctx.send(f'Kicked {mention.name}#{mention.discriminator} ({mention.id}) for: ```{reason}```')
 
-    @has_permissions(ban_members)
+    @commands.has_permissions(ban_members=True)
     @mem.command(
         brief='Ban a member.',
         description='Ban a member, optionally specifying a reason.'

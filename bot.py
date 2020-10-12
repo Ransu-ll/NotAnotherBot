@@ -12,6 +12,10 @@ from datetime import datetime
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
+intents = discord.Intents.default()
+intents.typing = False
+intents.presences = False
+
 
 # Thanks https://www.youtube.com/watch?v=yrHbGhem6I4&ab_channel=Lucas
 def get_prefix(bot, message):
@@ -25,6 +29,7 @@ def get_prefix(bot, message):
 # Initialise bot
 bot = commands.Bot(
     command_prefix=get_prefix,
+    intents=intents,
     allowed_mentions=discord.AllowedMentions(
         everyone=False,
         users=True,
